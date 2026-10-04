@@ -24,7 +24,7 @@ Point your AI coding agent (Claude Code, Gemini, or another skill-aware harness)
 cd C:\Users\chest\Desktop\workspace\projects\AISkills
 ```
 
-Claude Code and compatible agents automatically scan `skills/**/SKILL.md` for the `name`/`description` YAML frontmatter and match it against the task at hand — there is no separate registration step. See [Authoring New Skills](#authoring-new-skills) below for the frontmatter format that makes a skill discoverable.
+Claude Code and compatible agents automatically scan `skills/**/SKILL.md` — note the exact uppercase filename. A lowercase `skill.md` is **not** detected on case-sensitive filesystems, so the loader will silently skip the skill. See [Authoring New Skills](#authoring-new-skills) below for the frontmatter format that makes a skill discoverable.
 
 ### 2. Configure `.env`
 
@@ -38,16 +38,17 @@ cp .env.example .env
 
 ```env
 # TP-Link Tapo Smart Home Settings
-TAPO_USERNAME=chesterayala.ca@gmail.com
+TAPO_USERNAME=your-tapo-email@example.com
 TAPO_PASSWORD=your_tapo_cloud_password
 
-# Optional room mappings if device nicknames are generic (like "Light")
-TAPO_ROOM_MAP=living room:192.168.1.20,sala:192.168.1.20,terrace:192.168.1.16,chester:192.168.1.18
+# Optional room mappings if device nicknames are generic (like "Light").
+# Format: room_name:ip_address,room_name:ip_address — kept in .env, never committed.
+TAPO_ROOM_MAP=living room:192.168.1.20,sala:192.168.1.20
 
 # Facebook Messenger Bot Settings
 FB_COOKIES='[{"name": "c_user", "value": "..."}, {"name": "xs", "value": "..."}]'
-AUTHORIZED_FB_USERS=61583543048771
-DEFAULT_FB_THREAD_ID=999362160187597
+AUTHORIZED_FB_USERS=comma_separated_facebook_user_ids
+DEFAULT_FB_THREAD_ID=default_facebook_thread_id
 
 # AI Evaluation & Routing (Optional)
 GEMINI_API_KEY=your_gemini_api_key

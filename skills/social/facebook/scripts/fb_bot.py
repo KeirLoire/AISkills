@@ -62,15 +62,7 @@ TAPO_CACHE_PATH = os.path.abspath(os.path.join(TAPO_PATH, "tapo_cache.json"))
 
 # Custom room-to-IP mappings to handle duplicate device names
 ROOM_MAP_RAW = os.getenv("TAPO_ROOM_MAP", "")
-ROOM_MAP = {
-    "chester": "192.168.1.18",
-    "chester's room": "192.168.1.18",
-    "chester room": "192.168.1.18",
-    "garage": "192.168.1.4",
-    "living room": "192.168.1.15",
-    "sala": "192.168.1.15",
-    "sala room": "192.168.1.15"
-}
+ROOM_MAP = {}
 if ROOM_MAP_RAW:
     for item in ROOM_MAP_RAW.split(","):
         if ":" in item:
