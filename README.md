@@ -82,6 +82,7 @@ Skills are organized logically by category and name:
 | :--- | :--- | :--- | :--- |
 | **Home** | [Tapo Device Control](skills/home/tapo/SKILL.md) | Turns Tapo smart plugs and bulbs on or off and checks status/power draw using auto-discovery. | Tapo smart devices |
 | **Social** | [Facebook Messenger Control](skills/social/facebook/SKILL.md) | Hosts a Messenger chat bot to listen for home automation commands from authorized users. | Facebook Messenger chats |
+| **Dev** | [Antigravity CLI](skills/dev/antigravity-cli/SKILL.md) | Drives the Antigravity CLI (`agy`) for non-interactive agentic runs, with verified flag surface, permission setup, and failure-mode handling. | Antigravity CLI (`agy`) |
 
 ---
 
