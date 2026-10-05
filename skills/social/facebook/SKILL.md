@@ -14,13 +14,11 @@ This skill enables a Facebook Messenger chatbot to listen for commands in group 
 
 ## Prerequisites
 
-1.  **Configure Cookies**:
+1.  **Establish a Session**:
     - Unofficial Facebook APIs cannot log in via username/password due to Facebook's security algorithms. You must use session cookies.
-    - Run the cookie generator script to easily extract cookies via your browser:
-      ```powershell
-      python skills/social/facebook/scripts/generate_cookies.py
-      ```
-    - The script will automatically generate your cookies and write them to `skills/social/facebook/scripts/fb_cookies.json` and the `.env` file under `FB_COOKIES`.
+    - Have the user log in through the agent's managed browser profile rather than a cookie generator script. The agent drives the login; the user completes it interactively.
+    - After a successful login, the agent extracts the session cookies (`c_user` and `xs`) from that browser profile and writes them to `skills/social/facebook/scripts/fb_cookies.json` and to the `.env` file under `FB_COOKIES`.
+    - Verify the session by checking for `c_user` before starting any long-running consumer. Note that `xs` is HttpOnly and will not appear in a `document.cookie` read.
 2.  **Configurations**:
     - `TAPO_USERNAME` and `TAPO_PASSWORD` in the local `.env` file (for Tapo control).
     - `AUTHORIZED_FB_USERS`: List of comma-separated Facebook User IDs permitted to run commands.
@@ -77,7 +75,7 @@ The `--wait` flag will poll the thread and output the first new reply sent by an
 
 ## Edge Cases & Constraints
 
-- **Session Expiration**: Facebook session cookies expire periodically. If the bot fails to connect or logs "Unauthorized/Forbidden", run `generate_cookies.py` again to refresh.
+- **Session Expiration**: Facebook session cookies expire periodically. If the bot fails to connect or logs "Unauthorized/Forbidden", have the user log in again through the managed browser profile and re-extract the session cookies.
 - **E2EE Limitations**: Due to End-to-End Encryption (E2EE), the bot cannot read or reply to direct messages (one-to-one chats). It **must be used within Group Chats** or on Facebook Pages.
 - **Account Protection**: Always use a secondary or dummy Facebook account for the bot to avoid risking your primary account.
 
