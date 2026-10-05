@@ -263,3 +263,12 @@ Before declaring an `agy` task complete, confirm all of the following:
 - [ ] No `Eligibility check failed` / 503 text in stderr.
 - [ ] If the run was killed by `timeout`, re-run it redirected to a file rather than
       through a pipe, and do not read the silence as failure.
+
+## Token / Performance Optimization
+
+- **Batch related questions** into one prompt. Input tokens are ~11.7k even for a 2-word prompt (preloaded system/tooling context). A single multi-part prompt costs far less than N separate calls.
+- **Use `--continue` / `-c`** for iterative work on the same conversation. It reuses cache (observed `cache_read_tokens` ~20k) rather than rebuilding the full context window.
+- **Avoid trivial prompts.** A bare "say OK" still consumes ~11.7k input tokens + 21 thinking tokens. Only invoke when there is a concrete deliverable.
+- **Prefer `gemini-3.8-flash-low`** (cheap default) over `claude-opus-5-5-high` unless the task needs heavy reasoning. The cost table above scales roughly 3-5x with task complexity regardless of prompt length.
+- **Redirect output to a file** rather than piping through `head`. A kill signal through a pipe produces `context canceled` (not an `agy` error) and wastes tokens.
+- **Retry 503 errors up to 3 times** with short backoff. A retry costs tokens but less than a manual recovery cycle. Do not silently return empty output.

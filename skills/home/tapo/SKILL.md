@@ -81,3 +81,10 @@ All commands are run from the project directory:
 - [ ] Is the computer on the same local network as the smart devices?
 - [ ] Does `python tapo_control.py` successfully list all active devices?
 - [ ] Can you control devices by their exact name?
+
+## Performance & Hygiene Notes (verified 2026-10-06)
+
+- **Secrets hygiene:** The `.env` file contains real unredacted Tapo credentials. It is covered by `.gitignore` (`.env`, `.env.local`); never echo its contents in scripts/logs. For unattended automation, vault entries must be `env` kind (readable) — `secret` kind is write-only and cannot be piped into scripts. If migrating: `secrets request` → set `kind=env`.
+- **Never trust cached IPs for DHCP networks.** A Tapo device moved `192.168.1.18` → `.8` between runs. The script discovers live via subnet scan; use history only to sanity-check alias/description match, never as an address source.
+- **Local venv required:** The skill ships a `.venv` at `scripts/.venv/`. Activate before first run (`source scripts/.venv/bin/activate`) — bare `import tapo` fails on this host due to PEP 668 restrictions.
+- **Performance:** A full subnet scan takes 1–2 s vs <100ms for a cached hit. Batch device status checks into one `python tapo_control.py` invocation without args to list all devices at once rather than N separate calls.
